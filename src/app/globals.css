@@ -1,20 +1,22 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  
-  /* Corporate Green Theme */
-  --primary: #059669; /* Emerald 600 */
-  --primary-foreground: #ffffff;
-  --secondary: #d1fae5; /* Emerald 100 */
-  --secondary-foreground: #065f46; /* Emerald 800 */
-  --accent: #10b981; /* Emerald 500 */
+  --background: #f4eee0;       /* Warm Beige background */
+  --foreground: #1c2e22;       /* Very dark green-tinted text */
+
+  /* Dark Green, Light Green, and Beige Tones */
+  --primary: #1e3f22;          /* Koyu Yeşil (Dark Green) */
+  --primary-foreground: #f4eee0; /* Bej */
+  --secondary: #d8e2d4;        /* Açık Yeşil (Light Green) */
+  --secondary-foreground: #1b2e22; /* Koyu Yeşil */
+  --accent: #486b4a;           /* Soft Muted Green */
   --accent-foreground: #ffffff;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
-  
+  --muted: #e9e2d3;            /* Slightly darker beige for contrast */
+  --muted-foreground: #5e6b5d; /* Muted dark green */
+  --border: #d5ccba;           /* Beige border */
+
   --radius: 0.75rem;
 }
 
@@ -35,7 +37,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --font-sans: var(--font-outfit), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
 }
 
 body {
@@ -43,24 +45,26 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  /* subtle gradient background for the whole site */
-  background-image: radial-gradient(at 0% 0%, hsla(158,100%,74%,0.15) 0px, transparent 50%),
-                    radial-gradient(at 100% 0%, hsla(160,84%,39%,0.1) 0px, transparent 50%);
+  /* Subtle ambient gradient blending beige and light green */
+  background-image:
+    radial-gradient(at 0% 0%,    hsla(113, 15%, 85%, 0.6)   0px, transparent 55%),
+    radial-gradient(at 100% 0%,  hsla(42, 33%, 89%, 0.5)    0px, transparent 55%),
+    radial-gradient(at 50% 100%, hsla(113, 20%, 90%, 0.4)   0px, transparent 55%);
   background-attachment: fixed;
 }
 
 /* Glassmorphism Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(249, 250, 251, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.80);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.07);
 }

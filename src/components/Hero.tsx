@@ -31,17 +31,16 @@ export function Hero() {
                             Open to Work
                         </motion.div>
 
-                        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground">
-                            Hello, I&apos;m <span className="text-primary">Zeynel</span> 👋
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
+                            Kod ile Stratejiyi,{" "}<span className="text-primary">Veri ile Kararı</span>{" "}Birleştiriyorum.
                         </h1>
 
-                        <div className="flex items-center space-x-2 text-3xl md:text-5xl font-semibold text-foreground/80 h-16">
-                            <span>I am a</span>
-                            <AnimatedRoles />
-                        </div>
+                        <p className="text-base md:text-lg text-foreground/70 font-medium max-w-lg leading-relaxed border-l-4 border-primary/40 pl-4 italic">
+                            Mehmet Zeycan Şener — Business Technology Architect
+                        </p>
 
                         <p className="text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed mt-4">
-                            I bridge the gap between design, code, data, and business strategy to build impactful, scalable solutions.
+                            Dokuz Eylül Üniversitesi Yönetim Bilişim Sistemleri öğrencisi olarak; karmaşık backend mimarileri kuruyor, yöneylem modelleriyle süreçleri optimize ediyor ve bilişim hukukundan finansa kadar kurumsal perspektifle projeler geliştiriyorum.
                         </p>
 
                         <div className="flex flex-wrap items-center gap-4 pt-6">
@@ -56,25 +55,48 @@ export function Hero() {
                         </div>
                     </motion.div>
 
-                    {/* Abstract Hero Graphic / Image Placeholder */}
+                    {/* Profile Picture / Image Area */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                        className="relative lg:h-[600px] w-full hidden lg:block"
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                        className="relative lg:h-[650px] w-full hidden lg:flex items-center justify-center p-8"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-3xl border border-white/50 shadow-2xl backdrop-blur-sm flex items-center justify-center overflow-hidden">
-                            {/* Complex Abstract Shape to represent code & design */}
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-                                className="absolute w-[150%] h-[150%] bg-[conic-gradient(from_0deg_at_50%_50%,var(--color-primary)_0%,var(--color-secondary)_50%,transparent_100%)] opacity-20"
-                            />
-                            <div className="relative z-10 w-full h-full glass m-6 rounded-2xl p-8 flex flex-col justify-end">
-                                <div className="w-1/2 h-4 bg-primary/20 rounded-full mb-3" />
-                                <div className="w-3/4 h-4 bg-primary/20 rounded-full mb-3" />
-                                <div className="w-2/3 h-4 bg-primary/20 rounded-full" />
+                        {/* Decorative Background Glows */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/10 rounded-full blur-[120px] pointer-events-none opacity-50" />
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/20 rounded-full blur-[80px] pointer-events-none" />
+
+                        <div className="relative z-10 w-full max-w-[450px] aspect-[3/4] group">
+                            {/* Animated Border Frame */}
+                            <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-primary via-green-700 to-secondary opacity-15 group-hover:opacity-30 blur-sm transition-opacity duration-700" />
+                            
+                            {/* Main Image Container */}
+                            <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/20 shadow-2xl backdrop-blur-sm bg-white/5">
+                                {/* Ambient Background Gradient inside card */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 z-10 pointer-events-none" />
+                                
+                                <img
+                                    src="/profile.jpg"
+                                    alt="Mehmet Zeycan Şener"
+                                    className="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+                                />
+
+                                {/* Light Sweep Effect */}
+                                <div className="absolute inset-0 z-20 pointer-events-none">
+                                    <div className="absolute inset-0 translate-x-[-150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-20deg]" />
+                                </div>
                             </div>
+
+                            {/* Floating decorative elements */}
+                            <motion.div
+                                animate={{ y: [0, -10, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute -top-4 -right-4 z-30 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl"
+                            >
+                                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                                    <div className="w-4 h-4 rounded-full bg-white/20 animate-ping" />
+                                </div>
+                            </motion.div>
                         </div>
                     </motion.div>
                 </div>

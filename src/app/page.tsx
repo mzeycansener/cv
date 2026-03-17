@@ -24,14 +24,14 @@ export default function Home() {
       </nav>
 
       <Hero />
-      <AboutSkills />
       <ExperienceTimeline />
       <Projects />
+      <AboutSkills />
       <Contact />
 
       {/* Footer */}
       <footer className="py-8 text-center text-muted-foreground border-t border-border/50 bg-background/80 glass">
-        <p className="font-medium">© {new Date().getFullYear()} Zeynel | YBS Expert. Advanced Portfolio Built with Next.js & Framer Motion.</p>
+        <p className="font-medium">© {new Date().getFullYear()} Mehmet Zeycan Şener | Dokuz Eylül Üniversitesi YBS Öğrencisi. Advanced Portfolio Built with Next.js & Framer Motion.</p>
       </footer>
     </main>
   );

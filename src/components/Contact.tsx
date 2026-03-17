@@ -40,7 +40,7 @@ export function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-muted-foreground mb-1">Email</p>
-                                    <a href="mailto:hello@zeynel.com" className="text-xl font-bold text-foreground hover:text-primary transition-colors">hello@zeynel.com</a>
+                                    <a href="mailto:hello@mehmetzeycan.com" className="text-xl font-bold text-foreground hover:text-primary transition-colors">hello@mehmetzeycan.com</a>
                                 </div>
                             </div>
 

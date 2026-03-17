@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { Component as LiquidGradient } from "@/components/ui/flow-gradient-hero-section";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "YBS Expert Portfolio | Developer, Designer & Data Analyst",
-  description: "Professional portfolio of an MIS (YBS) expert specializing in Graphic Design, Coding, Database Management, DSS, and Business Strategy.",
+  title: "Mehmet Zeycan Şener - Portfolio | Developer, Designer & Data Analyst",
+  description: "Professional portfolio of Mehmet Zeycan Şener, an MIS (YBS) student at Dokuz Eylül University specializing in Graphic Design, Coding, Database Management, DSS, and Business Strategy.",
 };
 
 export default function RootLayout({
@@ -19,8 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${outfit.variable} antialiased min-h-screen selection:bg-primary/20 selection:text-primary`}>
-        {children}
+      <body className={`${inter.variable} antialiased min-h-screen selection:bg-primary/20 selection:text-primary relative md:cursor-none`}>
+        <CustomCursor />
+        <LiquidGradient showPauseButton={false} />
+        <div className="relative z-10 w-full h-full">
+          {children}
+        </div>
       </body>
     </html>
   );
