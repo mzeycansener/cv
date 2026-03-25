@@ -4,8 +4,44 @@ import { motion } from "framer-motion";
 import { GlassCard } from "./ui/GlassCard";
 import { Button } from "./ui/Button";
 import { Send, MapPin, Mail, Phone } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Contact() {
+    const { language } = useLanguage();
+
+    const t = {
+        tr: {
+            title: "Birlikte Çalışalım",
+            subtitle: "Full-stack bir geliştiriciye, UX/UI tasarımına veya stratejik veri çözümlerine mi ihtiyacınız var?",
+            email: "E-Posta",
+            phone: "Telefon",
+            location: "Konum",
+            city: "İzmir, Türkiye",
+            nameLabel: "İsim",
+            namePlaceholder: "Adınız Soyadınız",
+            emailLabel: "E-Posta",
+            emailPlaceholder: "ornek@mail.com",
+            messageLabel: "Mesaj",
+            messagePlaceholder: "Proje gereksinimlerinizden bahsedin...",
+            send: "Mesaj Gönder"
+        },
+        en: {
+            title: "Let's Work Together",
+            subtitle: "Whether you need a full-stack developer, a UX/UI redesign, or strategic data solutions.",
+            email: "Email",
+            phone: "Phone",
+            location: "Location",
+            city: "İzmir, Turkey",
+            nameLabel: "Name",
+            namePlaceholder: "John Doe",
+            emailLabel: "Email",
+            emailPlaceholder: "john@example.com",
+            messageLabel: "Message",
+            messagePlaceholder: "Tell me about your project requirements...",
+            send: "Send Message"
+        }
+    }[language];
+
     return (
         <section id="contact" className="py-24 relative overflow-hidden bg-primary/5">
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
@@ -18,9 +54,9 @@ export function Contact() {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Let&apos;s Work Together</h2>
+                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">{t.title}</h2>
                     <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                        Whether you need a full-stack developer, a UX/UI redesign, or strategic data solutions.
+                        {t.subtitle}
                     </p>
                 </motion.div>
 
@@ -39,8 +75,8 @@ export function Contact() {
                                     <Mail className="w-8 h-8 text-primary" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-muted-foreground mb-1">Email</p>
-                                    <a href="mailto:hello@mehmetzeycan.com" className="text-xl font-bold text-foreground hover:text-primary transition-colors">hello@mehmetzeycan.com</a>
+                                    <p className="text-sm font-semibold text-muted-foreground mb-1">{t.email}</p>
+                                    <a href="mailto:mzeycansener@gmail.com" className="text-xl font-bold text-foreground hover:text-primary transition-colors">mzeycansener@gmail.com</a>
                                 </div>
                             </div>
 
@@ -49,8 +85,8 @@ export function Contact() {
                                     <Phone className="w-8 h-8 text-primary" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-muted-foreground mb-1">Phone</p>
-                                    <a href="tel:+905555555555" className="text-xl font-bold text-foreground hover:text-primary transition-colors">+90 (555) 555 55 55</a>
+                                    <p className="text-sm font-semibold text-muted-foreground mb-1">{t.phone}</p>
+                                    <a href="tel:+905360801009" className="text-xl font-bold text-foreground hover:text-primary transition-colors">+90 536 080 10 09</a>
                                 </div>
                             </div>
 
@@ -59,8 +95,8 @@ export function Contact() {
                                     <MapPin className="w-8 h-8 text-primary" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold text-muted-foreground mb-1">Location</p>
-                                    <p className="text-xl font-bold text-foreground">Istanbul, Turkey</p>
+                                    <p className="text-sm font-semibold text-muted-foreground mb-1">{t.location}</p>
+                                    <p className="text-xl font-bold text-foreground">{t.city}</p>
                                 </div>
                             </div>
                         </GlassCard>
@@ -76,34 +112,34 @@ export function Contact() {
                             <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-foreground">Name</label>
+                                        <label className="text-sm font-medium text-foreground">{t.nameLabel}</label>
                                         <input
                                             type="text"
                                             className="w-full px-4 py-3 rounded-xl bg-white/50 border border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/60 cursor-none"
-                                            placeholder="John Doe"
+                                            placeholder={t.namePlaceholder}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-foreground">Email</label>
+                                        <label className="text-sm font-medium text-foreground">{t.emailLabel}</label>
                                         <input
                                             type="email"
                                             className="w-full px-4 py-3 rounded-xl bg-white/50 border border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/60 cursor-none"
-                                            placeholder="john@example.com"
+                                            placeholder={t.emailPlaceholder}
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-foreground">Message</label>
+                                    <label className="text-sm font-medium text-foreground">{t.messageLabel}</label>
                                     <textarea
                                         rows={5}
                                         className="w-full px-4 py-3 rounded-xl bg-white/50 border border-border/50 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none placeholder:text-muted-foreground/60 cursor-none"
-                                        placeholder="Tell me about your project requirements..."
+                                        placeholder={t.messagePlaceholder}
                                     />
                                 </div>
 
                                 <Button className="w-full py-6 text-lg">
-                                    Send Message
+                                    {t.send}
                                     <Send className="ml-2 w-5 h-5" />
                                 </Button>
                             </form>

@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { Play, Pause } from 'lucide-react';
 
 interface LiquidGradientProps {
     title?: string;
@@ -12,7 +11,7 @@ interface LiquidGradientProps {
 }
 
 class TouchTexture {
-    size = 64; width = 64; height = 64; maxAge = 64; radius = 0.1; speed = 1 / 64;
+    size = 128; width = 128; height = 128; maxAge = 120; radius = 0.15; speed = 1 / 60;
     trail: any[] = []; last: any = null;
     canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D; texture: any;
     constructor() {
@@ -42,7 +41,7 @@ class TouchTexture {
             if (dx === 0 && dy === 0) return;
             const d = Math.sqrt(dx * dx + dy * dy);
             vx = dx / d; vy = dy / d;
-            force = Math.min((dx * dx + dy * dy) * 20000, 2.0);
+            force = Math.min((dx * dx + dy * dy) * 40000, 4.0);
         }
         this.last = { x: point.x, y: point.y };
         this.trail.push({ x: point.x, y: point.y, age: 0, force, vx, vy });
@@ -51,17 +50,17 @@ class TouchTexture {
         const pos = { x: p.x * this.width, y: (1 - p.y) * this.height };
         let intensity = p.age < this.maxAge * 0.3
             ? Math.sin((p.age / (this.maxAge * 0.3)) * (Math.PI / 2))
-            : -((1 - (p.age - this.maxAge * 0.3) / (this.maxAge * 0.7)) * ((1 - (p.age - this.maxAge * 0.3) / (this.maxAge * 0.7)) - 2));
+            : 1.0 - (p.age - this.maxAge * 0.3) / (this.maxAge * 0.7);
         intensity *= p.force;
-        const color = `${((p.vx + 1) / 2) * 255}, ${((p.vy + 1) / 2) * 255}, ${intensity * 255}`;
+        
         const radius = this.radius * this.width;
-        this.ctx.shadowOffsetX = this.size * 5;
-        this.ctx.shadowOffsetY = this.size * 5;
-        this.ctx.shadowBlur = radius;
-        this.ctx.shadowColor = `rgba(${color},${0.2 * intensity})`;
+        const gr = this.ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, radius);
+        gr.addColorStop(0, `rgba(255, 255, 255, ${0.4 * intensity})`);
+        gr.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        
         this.ctx.beginPath();
-        this.ctx.fillStyle = "rgba(255,0,0,1)";
-        this.ctx.arc(pos.x - this.size * 5, pos.y - this.size * 5, radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = gr;
+        this.ctx.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
         this.ctx.fill();
     }
 }
@@ -73,18 +72,18 @@ class GradientBackground {
         this.uniforms = {
             uTime: { value: 0 },
             uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-            // Forest Green + Light Green/White tones — strictly warm green
-            uColor1: { value: new THREE.Vector3(0.070, 0.370, 0.160) }, // deep muted forest green
-            uColor2: { value: new THREE.Vector3(0.100, 0.290, 0.130) }, // very dark green
-            uColor3: { value: new THREE.Vector3(0.070, 0.370, 0.160) },
-            uColor4: { value: new THREE.Vector3(0.090, 0.450, 0.185) }, // mid-dark green
-            uColor5: { value: new THREE.Vector3(0.100, 0.290, 0.130) },
-            uColor6: { value: new THREE.Vector3(0.500, 0.700, 0.540) }, // soft muted mint — NOT bright white
-            uSpeed: { value: 0.45 }, uIntensity: { value: 0.72 },
-            uTouchTexture: { value: null }, uGrainIntensity: { value: 0.03 },
-            uDarkNavy: { value: new THREE.Vector3(0.035, 0.059, 0.098) },
-            uGradientSize: { value: 0.42 }, uGradientCount: { value: 6.0 },
-            uColor1Weight: { value: 0.4 }, uColor2Weight: { value: 0.9 }
+            // Soft Sage & Cream Palette (warm, desaturated, earthy)
+            uColor1: { value: new THREE.Vector3(0.72, 0.82, 0.72) }, // Soft Sage Green
+            uColor2: { value: new THREE.Vector3(0.78, 0.87, 0.76) }, // Warm Mint
+            uColor3: { value: new THREE.Vector3(0.88, 0.90, 0.82) }, // Cream-Green
+            uColor4: { value: new THREE.Vector3(0.80, 0.88, 0.78) }, // Pale Green
+            uColor5: { value: new THREE.Vector3(0.75, 0.84, 0.74) }, // Muted Sage
+            uColor6: { value: new THREE.Vector3(0.95, 0.93, 0.87) }, // Warm Cream
+            uSpeed: { value: 0.2 }, uIntensity: { value: 0.55 },
+            uTouchTexture: { value: null }, uGrainIntensity: { value: 0.01 },
+            uDarkNavy: { value: new THREE.Vector3(0.957, 0.933, 0.878) }, // Warm Beige Base
+            uGradientSize: { value: 0.70 }, uGradientCount: { value: 4.0 },
+            uColor1Weight: { value: 0.5 }, uColor2Weight: { value: 0.7 }
         };
     }
     init() {
@@ -155,17 +154,11 @@ class GradientBackground {
     }
     update(delta: number) { if (!this.isPaused) this.uniforms.uTime.value += delta; }
     setTheme(isDark: boolean) {
-        if (isDark) {
-            this.uniforms.uColor1.value.set(0.082, 0.502, 0.235); // mid-forest green
-            this.uniforms.uColor2.value.set(0.133, 0.380, 0.169); // dark forest green
-            this.uniforms.uDarkNavy.value.set(0.035, 0.059, 0.098);
-            this.sceneManager.scene.background = new THREE.Color(0x0f172a);
-        } else {
-            this.uniforms.uColor1.value.set(0.070, 0.370, 0.160); // muted forest green
-            this.uniforms.uColor2.value.set(0.170, 0.600, 0.310); // calmer mid-green
-            this.uniforms.uDarkNavy.value.set(0.945, 0.970, 0.950); // soft off-white green tint
-            this.sceneManager.scene.background = new THREE.Color(0xf3f6f3);
-        }
+        // Always force the warm cream-sage theme regardless of OS settings
+        this.uniforms.uColor1.value.set(0.72, 0.82, 0.72); // Soft Sage Green
+        this.uniforms.uColor2.value.set(0.78, 0.87, 0.76); // Warm Mint
+        this.uniforms.uDarkNavy.value.set(0.957, 0.933, 0.878); // Warm Beige (#f4eee0)
+        this.sceneManager.scene.background = new THREE.Color(0xf4eee0);
     }
     onResize(w: number, h: number) {
         const viewSize = this.sceneManager.getViewSize();
@@ -187,7 +180,7 @@ class App {
         this.camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 10000);
         this.camera.position.z = 50;
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x0f172a);
+        this.scene.background = new THREE.Color(0xf4eee0);
         this.clock = new THREE.Clock();
         this.touchTexture = new TouchTexture();
         this.gradientBackground = new GradientBackground(this);
@@ -205,10 +198,7 @@ class App {
         this.gradientBackground.init();
         const c = this.container;
         const onMove = (x: number, y: number) => { this.touchTexture.addTouch({ x: x / window.innerWidth, y: 1 - y / window.innerHeight }); };
-        window.addEventListener("mousemove", (e) => onMove(e.clientX, e.clientY));
-        window.addEventListener("touchmove", (e) => {
-            onMove(e.touches[0].clientX, e.touches[0].clientY);
-        });
+        window.addEventListener("pointermove", (e) => onMove(e.clientX, e.clientY));
 
         // Add resize observer instead of just window resize
         const resizeObserver = new ResizeObserver((entries) => {
@@ -243,132 +233,30 @@ class App {
     }
 }
 
-export default function LiquidGradient({
-    title,
-    showPauseButton = true,
-    ctaText,
-    onCtaClick
-}: LiquidGradientProps) {
+export default function LiquidGradient({}: LiquidGradientProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const cursorRef = useRef<HTMLDivElement>(null);
-    const cursorDotRef = useRef<HTMLDivElement>(null);
-    const [isDarkMode, setIsDarkMode] = useState(true);
-    const [isPlaying, setIsPlaying] = useState(true);
-    const [showCursor, setShowCursor] = useState(false);
     const appRef = useRef<any>(null);
-    const mousePos = useRef({ x: 0, y: 0 });
 
     // Platform theme detection
     useEffect(() => {
-        const checkTheme = () => {
-            const html = document.documentElement;
-            const body = document.body;
-            const isDark = html.classList.contains('dark') ||
-                body.classList.contains('dark') ||
-                html.getAttribute('data-theme') === 'dark' ||
-                window.matchMedia('(prefers-color-scheme: dark)').matches;
-            setIsDarkMode(isDark);
-        };
-        checkTheme();
-        const observer = new MutationObserver(checkTheme);
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
-        observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        mediaQuery.addEventListener('change', checkTheme);
-        return () => { observer.disconnect(); mediaQuery.removeEventListener('change', checkTheme); };
-    }, []);
-
-    // Custom cursor
-    useEffect(() => {
-        const cursor = cursorRef.current;
-        const dot = cursorDotRef.current;
-        if (!cursor || !dot) return;
-        let cursorX = 0, cursorY = 0, dotX = 0, dotY = 0, animId: number;
-        const animate = () => {
-            if (mousePos.current) {
-                cursorX += (mousePos.current.x - cursorX) * 0.12;
-                cursorY += (mousePos.current.y - cursorY) * 0.12;
-                dotX += (mousePos.current.x - dotX) * 0.3;
-                dotY += (mousePos.current.y - dotY) * 0.3;
-                cursor.style.transform = `translate(${cursorX - 20}px, ${cursorY - 20}px)`;
-                dot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px)`;
-            }
-            animId = requestAnimationFrame(animate);
-        };
-        animate();
-        return () => cancelAnimationFrame(animId);
+        if (appRef.current) appRef.current.setTheme(false);
     }, []);
 
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
-
         if (appRef.current) appRef.current.cleanup();
         appRef.current = new App(container);
-
+        appRef.current.setTheme(false);
         return () => { if (appRef.current) appRef.current.cleanup(); };
     }, []);
 
-    useEffect(() => { if (appRef.current) appRef.current.setTheme(isDarkMode); }, [isDarkMode]);
-    useEffect(() => { if (appRef.current) appRef.current.setPaused(!isPlaying); }, [isPlaying]);
 
     return (
         <div
             className="fixed inset-0 z-[-1] w-full h-full overflow-hidden pointer-events-none"
-            onMouseEnter={() => setShowCursor(true)}
-            onMouseLeave={() => setShowCursor(false)}
         >
             <div ref={containerRef} className="absolute inset-0 z-0 w-[100vw] h-[100vh]" />
-
-            {/* Custom Cursor */}
-            <div
-                ref={cursorRef}
-                className={`pointer-events-none fixed z-50 w-10 h-10 border border-primary/50 text-white rounded-full transition-opacity duration-300 ${isDarkMode ? 'border-primary/50' : 'border-primary'}`}
-                style={{ opacity: showCursor ? 1 : 0, left: 0, top: 0, display: 'none' }}
-            />
-            <div
-                ref={cursorDotRef}
-                className={`pointer-events-none fixed z-50 w-2 h-2 bg-primary rounded-full transition-opacity duration-300 ${isDarkMode ? 'bg-primary' : 'bg-primary/80'}`}
-                style={{ opacity: showCursor ? 1 : 0, left: 0, top: 0, display: 'none' }}
-            />
-
-            <div className="relative z-10 w-full h-full flex flex-col justify-between p-6 pointer-events-none">
-                <div>
-                    {title && (
-                        <h2 className="text-2xl font-bold text-white drop-shadow-md pointer-events-auto">
-                            {title}
-                        </h2>
-                    )}
-                </div>
-
-                <div className="flex items-end justify-between">
-                    <div className="pointer-events-auto">
-                        {ctaText && onCtaClick && (
-                            <button
-                                className="px-6 py-2 bg-primary/20 backdrop-blur-md border border-white/20 text-white rounded-full hover:bg-primary/40 transition-colors pointer-events-auto"
-                                onClick={onCtaClick}
-                            >
-                                {ctaText}
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Pause/Play Button */}
-                    {showPauseButton && (
-                        <button
-                            onClick={() => setIsPlaying(!isPlaying)}
-                            className="pointer-events-auto p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white/10 transition-colors"
-                            aria-label={isPlaying ? 'Pause animation' : 'Play animation'}
-                        >
-                            {isPlaying ? (
-                                <Pause className="w-5 h-5 cursor-pointer" />
-                            ) : (
-                                <Play className="w-5 h-5 ml-1 cursor-pointer" />
-                            )}
-                        </button>
-                    )}
-                </div>
-            </div>
         </div>
     );
 }

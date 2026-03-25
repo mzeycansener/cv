@@ -5,147 +5,13 @@ import { useState } from "react";
 import { FlowingMenu } from "./ui/FlowingMenu";
 import {
     X, Plus, Database, Code2, PenTool, Lightbulb, PieChart, GraduationCap, Guitar,
-    Server, GitBranch, Globe, BarChart3, Cpu, Brain, Scale, ShoppingCart, Map, Satellite
+    Server, GitBranch, Globe, BarChart3, Cpu, Brain, Scale, ShoppingCart, Map, Satellite,
+    Layers, Zap, Shield, Search, Terminal, Layout, MousePointer2, Settings, Box, 
+    BarChart, Activity, Lock, Share2, Hexagon, Component, LucideIcon
 } from "lucide-react";
 
-/* ─────────── Profile Cards Data ─────────── */
-const cards = [
-    {
-        id: "education",
-        title: "Eğitim",
-        subtitle: "DEÜ · YBS",
-        icon: GraduationCap,
-        color: "#1a1a2e",
-        accent: "#10b981",
-        image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1000&auto=format&fit=crop",
-        description: "Dokuz Eylül Üniversitesi'nde Yönetim Bilişim Sistemleri (YBS) bölümünde öğrenciyim. Teknoloji ve işletmenin kesiştiği bu alanda hem teknik hem de stratejik düşünme yetisi kazanıyorum.",
-        tags: ["Sistem Analizi", "Yöneylem Araştırması", "Veritabanı Yönetimi", "Bilişim Hukuku"],
-    },
-    {
-        id: "coding",
-        title: "Kodlama",
-        subtitle: "Full-Stack Dev",
-        icon: Code2,
-        color: "#0f172a",
-        accent: "#6366f1",
-        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop",
-        description: "Node.js ve JavaScript ile ölçeklenebilir backend sistemleri geliştiriyorum. React ve Next.js ile modern, kullanıcı odaklı arayüzler tasarlıyor, RESTful API'lar ve veritabanı entegrasyonları kuruyorum.",
-        tags: ["Node.js / JavaScript", "React / Next.js", "RESTful API", "Sistem Analizi & UML"],
-    },
-    {
-        id: "database",
-        title: "Veritabanı",
-        subtitle: "MySQL · Spatial DB",
-        icon: Database,
-        color: "#172554",
-        accent: "#3b82f6",
-        image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=1000&auto=format&fit=crop",
-        description: "MySQL ve Mekansal Veritabanları (Spatial DB) ile ileri seviye ilişkisel modelleme yapıyorum. Karmaşık şema tasarımı, sorgu optimizasyonu ve büyük ölçekli veri mimarisinde deneyim sahibiyim.",
-        tags: ["MySQL", "Spatial DB", "Şema Tasarımı", "Sorgu Optimizasyonu"],
-    },
-    {
-        id: "dss",
-        title: "Karar Destek",
-        subtitle: "KDS & Yöneylem",
-        icon: Lightbulb,
-        color: "#1a1200",
-        accent: "#f97316",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
-        description: "Simplex, Hedef Programlama ve Dualite yöntemleriyle kaynak optimizasyonu yapıyorum. Veriden stratejik anlam çıkaran tahminleme ve raporlama modelleri geliştiriyorum.",
-        tags: ["Simplex & Dualite", "Hedef Programlama", "KDS Modelleme", "Raporlama"],
-    },
-    {
-        id: "business",
-        title: "İş & Hukuk",
-        subtitle: "KVKK & Finans",
-        icon: PieChart,
-        color: "#16001a",
-        accent: "#a855f7",
-        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop",
-        description: "Finansal ve Yönetim Muhasebesi ilkeleriyle proje bütçeleme ve ROI analizi yapıyorum. KVKK uyumluluğu, fikri mülkiyet hakları ve dijital etik çerçevesinde güvenli sistemler tasarlıyorum.",
-        tags: ["KVKK Uyumluluğu", "ROI Analizi", "E-Ticaret B2B/B2C", "Bilişim Hukuku"],
-    },
-    {
-        id: "gis",
-        title: "Mekansal",
-        subtitle: "CBS · Uzaktan Algılama",
-        icon: Map,
-        color: "#0c1a0a",
-        accent: "#22d3ee",
-        image: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?q=80&w=1000&auto=format&fit=crop",
-        description: "Coğrafi Bilgi Sistemleri (CBS) ile konumsal verinin analizi, haritalandırılması ve veritabanı entegrasyonunu gerçekleştiriyorum. Uydu görüntüleri ve mekansal veriler üzerinden analiz yetkinliğine sahibim.",
-        tags: ["Coğrafi Bilgi Sistemleri", "Uzaktan Algılama", "Mekansal DB", "Konumsal Analiz"],
-    },
-    {
-        id: "design",
-        title: "Tasarım",
-        subtitle: "UI/UX & Grafik",
-        icon: PenTool,
-        color: "#1f0533",
-        accent: "#e879f9",
-        image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=1000&auto=format&fit=crop",
-        description: "Figma ve Adobe Creative Cloud ile kullanıcı deneyimi odaklı arayüzler ve kurumsal kimlik çalışmaları yapıyorum. Tipografi, renk teorisi ve görsel hiyerarşi konularına hakimim.",
-        tags: ["Figma", "Adobe CC", "UI/UX Tasarım", "Marka Kimliği"],
-    },
-    {
-        id: "bass",
-        title: "Kişisel",
-        subtitle: "Müzik · Doğa · Sinema",
-        icon: Guitar,
-        color: "#1a0a00",
-        accent: "#f59e0b",
-        image: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=1000&auto=format&fit=crop",
-        description: "AFDOS bünyesinde doğa sporları, trekking ve kampçılık ile zorlu şartlarda dayanıklılık ve ekip ruhu geliştiriyorum. Bas gitar ile müzikal ritim anlayışımı; sinema ve teknoloji trendleriyle vizyonumu besliyorum. İleri seviye İngilizce, gelişmekte olan İspanyolca.",
-        tags: ["Bas Gitar", "AFDOS · Kampçılık", "İleri İngilizce", "İspanyolca"],
-    },
-];
-
-/* ─────────── T-Shaped Skills Data ─────────── */
-const skillCategories = [
-    {
-        id: "software",
-        label: "A. Yazılım & Sistem",
-        accent: "#6366f1",
-        icon: Server,
-        skills: [
-            { icon: Server, name: "Sunucu Tabanlı Programlama", desc: "Node.js & JavaScript ile ölçeklenebilir backend sistemleri" },
-            { icon: GitBranch, name: "Sistem Analizi & Tasarım", desc: "Gereksinim analizi, SDLC yönetimi ve UML tabanlı sistem tasarımı" },
-            { icon: Globe, name: "Web Teknolojileri", desc: "Dinamik, kullanıcı odaklı web arayüzleri ve API entegrasyonları" },
-        ],
-    },
-    {
-        id: "data",
-        label: "B. Veri & Analitik",
-        accent: "#3b82f6",
-        icon: BarChart3,
-        skills: [
-            { icon: Database, name: "Veritabanı Yönetimi", desc: "MySQL ve Spatial DB ile ileri seviye ilişkisel modelleme" },
-            { icon: Cpu, name: "Yöneylem Araştırması", desc: "Simplex, Hedef Programlama ve Dualite ile kaynak optimizasyonu" },
-            { icon: Brain, name: "Karar Destek Sistemleri", desc: "Veriden stratejik anlam çıkaran tahminleme ve raporlama modelleri" },
-        ],
-    },
-    {
-        id: "business",
-        label: "C. Kurumsal & Hukuk",
-        accent: "#a855f7",
-        icon: PieChart,
-        skills: [
-            { icon: PieChart, name: "Mali Yönetim", desc: "Muhasebe ilkeleriyle proje bütçeleme ve ROI analizi" },
-            { icon: Scale, name: "Bilişim Hukuku", desc: "KVKK uyumluluğu, fikri mülkiyet ve dijital etik çerçevesi" },
-            { icon: ShoppingCart, name: "E-Ticaret Stratejileri", desc: "B2B/B2C iş modelleri ve dinamik fiyatlandırma algoritmaları" },
-        ],
-    },
-    {
-        id: "spatial",
-        label: "D. Mekansal (Niş)",
-        accent: "#22d3ee",
-        icon: Map,
-        skills: [
-            { icon: Map, name: "Coğrafi Bilgi Sistemleri", desc: "Konumsal verinin analizi, haritalandırılması ve DB entegrasyonu" },
-            { icon: Satellite, name: "Uzaktan Algılama", desc: "Uydu görüntüleri ve mekansal veriler üzerinden analiz yetkinliği" },
-        ],
-    },
-];
+import { useLanguage } from "@/context/LanguageContext";
+import { cards, skillCategories, SkillCategory, SkillItem, TechItem, SkillStat } from "@/data/aboutData";
 
 /* ─────────── Grid Item ─────────── */
 /* ─────────── Grid Item ─────────── */
@@ -191,6 +57,8 @@ function MergeableGridItem({
     isDimmed: boolean;
     onHover: () => void;
 }) {
+    const { language } = useLanguage();
+
     return (
         <motion.div
             custom={index}
@@ -204,14 +72,14 @@ function MergeableGridItem({
         >
             <img
                 src={card.image}
-                alt={card.title}
+                alt={card.title[language]}
                 className="absolute inset-0 w-full h-full object-cover saturate-[1.1]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-3 flex items-end justify-between">
                 <div>
-                    <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest">{card.subtitle}</p>
-                    <h3 className="text-white text-sm font-bold leading-tight">{card.title}</h3>
+                    <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest">{card.subtitle[language]}</p>
+                    <h3 className="text-white text-sm font-bold leading-tight">{card.title[language]}</h3>
                 </div>
                 <div
                     className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 border border-white/20 text-white shrink-0"
@@ -233,6 +101,7 @@ function DetailPanel({
     onClose: () => void;
 }) {
     const Icon = card.icon;
+    const { language } = useLanguage();
 
     return (
         <div
@@ -241,7 +110,7 @@ function DetailPanel({
         >
             <img
                 src={card.image}
-                alt={card.title}
+                alt={card.title[language]}
                 className="absolute inset-0 w-full h-full object-cover saturate-[1.15] contrast-[1.05]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/10" />
@@ -271,7 +140,7 @@ function DetailPanel({
                     className="text-xs font-bold uppercase tracking-[0.25em] mb-2"
                     style={{ color: card.accent }}
                 >
-                    {card.subtitle}
+                    {card.subtitle[language]}
                 </motion.p>
 
                 <motion.h2
@@ -280,7 +149,7 @@ function DetailPanel({
                     transition={{ delay: 0.27 }}
                     className="text-4xl font-black text-white mb-4 tracking-tight"
                 >
-                    {card.title}
+                    {card.title[language]}
                 </motion.h2>
 
                 <motion.p
@@ -289,7 +158,7 @@ function DetailPanel({
                     transition={{ delay: 0.32 }}
                     className="text-white/75 text-sm leading-relaxed max-w-md mb-6"
                 >
-                    {card.description}
+                    {card.description[language]}
                 </motion.p>
 
                 <motion.div
@@ -298,7 +167,7 @@ function DetailPanel({
                     transition={{ delay: 0.4 }}
                     className="flex flex-wrap gap-2"
                 >
-                    {card.tags.map((tag) => (
+                    {card.tags[language].map((tag: string) => (
                         <span
                             key={tag}
                             className="px-3 py-1 rounded-full text-xs font-semibold"
@@ -316,7 +185,35 @@ function DetailPanel({
 /* ─────────── T-Shaped Skills Panel ─────────── */
 function TShapedSkills() {
     const [activeCategory, setActiveCategory] = useState(skillCategories[0].id);
+    const [selectedSkillIndex, setSelectedSkillIndex] = useState(0);
+    const { language } = useLanguage();
+
     const active = skillCategories.find(c => c.id === activeCategory)!;
+    const selectedSkill = active.skills[selectedSkillIndex] || active.skills[0];
+
+    const BGIcon = selectedSkill.bgIcon || selectedSkill.icon;
+
+    const handleCategoryChange = (id: string) => {
+        setActiveCategory(id);
+        setSelectedSkillIndex(0);
+    };
+
+    const t = {
+        tr: {
+            expertise: "Uzmanlık",
+            areas: "Yetkinlik Alanları",
+            desc: "T-Shaped bir profil: teknik derinlik ile kurumsal genişlik arasında köprü kuruyorum.",
+            skillsUnder: "altındaki beceriler",
+            explore: "TIKLA · KEŞFEDİN"
+        },
+        en: {
+            expertise: "Expertise",
+            areas: "Competency Areas",
+            desc: "A T-Shaped profile: bridging technical depth with corporate breadth.",
+            skillsUnder: "skills under",
+            explore: "CLICK · DISCOVER"
+        }
+    }[language];
 
     return (
         <motion.div
@@ -326,69 +223,237 @@ function TShapedSkills() {
             transition={{ duration: 0.6 }}
             className="mt-20"
         >
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">Uzmanlık</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">{t.expertise}</p>
             <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground mb-2 leading-tight">
-                Yetkinlik Alanları
+                {t.areas}
             </h2>
             <p className="text-muted-foreground mb-10 text-base max-w-xl">
-                T-Shaped bir profil: teknik derinlik ile kurumsal genişlik arasında köprü kuruyorum.
+                {t.desc}
             </p>
 
-            {/* Category tabs */}
-            <div className="flex flex-wrap gap-2 mb-8">
+            {/* Category tabs — Segmented pill design */}
+            <div className="inline-flex bg-secondary/40 backdrop-blur-md border border-border/40 rounded-2xl p-1.5 flex-wrap gap-1 mb-10 shadow-inner">
                 {skillCategories.map((cat) => {
                     const CatIcon = cat.icon;
                     const isActive = cat.id === activeCategory;
                     return (
                         <button
                             key={cat.id}
-                            onClick={() => setActiveCategory(cat.id)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${isActive
-                                ? "text-white shadow-lg"
-                                : "bg-background text-muted-foreground border-border hover:border-primary/50"
-                                }`}
-                            style={isActive ? { background: cat.accent, borderColor: cat.accent } : {}}
+                            onClick={() => handleCategoryChange(cat.id)}
+                            className={`relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                                isActive
+                                    ? "text-white shadow-lg"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-white/40"
+                            }`}
+                            style={isActive ? { background: `linear-gradient(135deg, ${cat.accent}ee, ${cat.accent}99)`, boxShadow: `0 4px 14px -4px ${cat.accent}66` } : {}}
                         >
-                            <CatIcon className="w-4 h-4" />
-                            {cat.label}
+                            <CatIcon className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? "scale-110" : ""}`} />
+                            {cat.label[language]}
                         </button>
                     );
                 })}
             </div>
 
-            {/* Skills FlowingMenu */}
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={activeCategory}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.35 }}
-                    className="w-full mt-8"
-                >
-                    <div style={{ height: '400px', position: 'relative' }}>
-                        <FlowingMenu 
-                            items={active.skills.map((skill, idx) => ({
-                                link: '#',
-                                text: skill.name,
-                                image: `https://picsum.photos/600/400?random=${idx + activeCategory.length * 10}`
-                            }))}
-                            speed={25}
-                            textColor={active.accent}
-                            bgColor="transparent"
-                            marqueeBgColor={active.accent}
-                            marqueeTextColor="#ffffff"
-                            borderColor={`${active.accent}40`}
-                        />
+            {/* Layout Container */}
+            <div className="grid md:grid-cols-12 gap-6 items-stretch">
+                {/* Details Section */}
+                <div className="md:col-span-6 flex">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={`${activeCategory}-${selectedSkillIndex}`}
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -16 }}
+                            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                            className="w-full flex flex-col rounded-[32px] overflow-hidden shadow-xl border border-border/30"
+                            style={{ background: `linear-gradient(160deg, #f9f6f0 0%, #eef4f0 100%)` }}
+                        >
+                            {/* Header with accent color */}
+                            <div
+                                className="relative h-52 flex flex-col items-center justify-center overflow-hidden px-8"
+                                style={{ background: `linear-gradient(135deg, ${active.accent}18 0%, ${active.accent}08 100%)` }}
+                            >
+                                {/* Background glow */}
+                                <div
+                                    className="absolute inset-0 blur-[80px] opacity-20"
+                                    style={{ background: `radial-gradient(circle at 40% 50%, ${active.accent} 0%, transparent 70%)` }}
+                                />
+                                <motion.div
+                                    initial={{ scale: 0.85, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ duration: 0.4 }}
+                                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 border"
+                                    style={{
+                                        background: `${active.accent}18`,
+                                        borderColor: `${active.accent}30`,
+                                        boxShadow: `0 8px 24px -8px ${active.accent}44`
+                                    }}
+                                >
+                                    <BGIcon className="w-7 h-7" style={{ color: active.accent }} />
+                                </motion.div>
+                                <motion.h3
+                                    initial={{ y: 8, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.15 }}
+                                    className="text-2xl font-black text-foreground tracking-tight text-center mb-1"
+                                >
+                                    {selectedSkill.name[language]}
+                                </motion.h3>
+                                <p className="text-xs font-bold uppercase tracking-[0.35em]" style={{ color: active.accent }}>
+                                    {active.label[language]}
+                                </p>
+                            </div>
+
+                            {/* Body */}
+                            <div className="flex-1 px-8 py-6">
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.25 }}
+                                    className="text-foreground/75 text-sm leading-relaxed text-center mb-7"
+                                >
+                                    {selectedSkill.longDesc[language]}
+                                </motion.p>
+
+                                {/* Tech Stack */}
+                                <div className="flex justify-center flex-wrap gap-6">
+                                    {selectedSkill.techStack.map((tech: TechItem, i: number) => (
+                                        <div key={i} className="flex flex-col items-center gap-2 group/tech">
+                                            <div
+                                                className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 bg-white border border-border/40 group-hover/tech:scale-110"
+                                                style={{ boxShadow: `0 4px 12px -4px ${active.accent}22` }}
+                                            >
+                                                <tech.icon className="w-5 h-5" style={{ color: active.accent }} />
+                                            </div>
+                                            <span className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.18em] group-hover/tech:text-primary transition-colors">
+                                                {tech.name}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Stats footer */}
+                            <div
+                                className="grid grid-cols-3 border-t"
+                                style={{ borderColor: `${active.accent}20`, background: `${active.accent}07` }}
+                            >
+                                {selectedSkill.stats.map((stat: SkillStat, i: number) => (
+                                    <div key={i} className={`py-5 px-4 text-center ${i < 2 ? 'border-r' : ''}`} style={{ borderColor: `${active.accent}20` }}>
+                                        <p className="text-[9px] font-black uppercase tracking-[0.25em] mb-1" style={{ color: `${active.accent}99` }}>
+                                            {stat.label}
+                                        </p>
+                                        <p className="text-xl font-black text-foreground" style={{ textShadow: `0 0 20px ${active.accent}33` }}>
+                                            {stat.value}
+                                        </p>
+                                        <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">
+                                            {stat.subValue}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+
+                {/* Skills FlowingMenu */}
+                <div className="md:col-span-6">
+                    <div className="mb-3 flex items-center justify-between px-2">
+                        <p className="text-xs font-medium text-muted-foreground">
+                            {language === 'tr' ? `${active.label[language]} ${t.skillsUnder}` : `${t.skillsUnder} ${active.label[language]}`}
+                        </p>
+                        <div className="flex items-center gap-1.5">
+                            <MousePointer2 className="w-3 h-3 animate-bounce" style={{ color: active.accent }} />
+                            <p className="text-[10px] font-bold tracking-widest" style={{ color: active.accent }}>
+                                {t.explore}
+                            </p>
+                        </div>
                     </div>
-                </motion.div>
-            </AnimatePresence>
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeCategory}
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <div
+                                style={{ height: '450px', position: 'relative', borderRadius: 32, overflow: 'hidden',
+                                    background: `linear-gradient(160deg, #f9f6f0 0%, ${active.accent}10 100%)`,
+                                    border: `1px solid ${active.accent}25`,
+                                    boxShadow: `0 8px 32px -8px ${active.accent}22`
+                                }}
+                            >
+                                <FlowingMenu
+                                    items={active.skills.map((skill, idx) => ({
+                                        link: '#',
+                                        text: skill.name[language],
+                                        image: `https://images.unsplash.com/photo-${[
+                                            "1555066931-4365d14bab8c",
+                                            "1551033406-611cf9a28f67",
+                                            "1517694712202-14dd9538aa97",
+                                            "1519389950473-47ba0277781c",
+                                        ][idx % 4]}?q=80&w=600&auto=format&fit=crop`
+                                    }))}
+                                    onItemClick={(index) => setSelectedSkillIndex(index)}
+                                    // @ts-ignore
+                                    speed={25}
+                                    textColor={active.accent}
+                                    bgColor="transparent"
+                                    marqueeBgColor={active.accent}
+                                    marqueeTextColor="#ffffff"
+                                    borderColor={`${active.accent}20`}
+                                />
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            </div>
         </motion.div>
     );
 }
 
 /* ─────────── Bridge Persona ─────────── */
 function BridgePersona() {
+    const { language } = useLanguage();
+
+    const text = {
+        tr: {
+            title: "Hakkımda",
+            p1_1: "Dokuz Eylül Üniversitesi Yönetim Bilişim Sistemleri 3. sınıf öğrencisi olarak, teknolojiyi işletme stratejileriyle harmanlayan ",
+            p1_2: "multidisipliner bir yaklaşımı",
+            p1_3: " benimsiyorum. Node.js, JavaScript ve MySQL tabanlı backend mimarilerini; Yöneylem Araştırması, Karar Destek Sistemleri ve Bilişim Hukuku gibi akademik disiplinlerle birleştirerek sadece kod üretmekle kalmıyor, aynı zamanda ",
+            p1_4: "maliyet etkinliği",
+            p1_5: " ve ",
+            p1_6: "yasal uyumluluğu",
+            p1_7: " gözetilen ",
+            p1_8: "stratejik iş çözümleri",
+            p1_9: " tasarlıyorum.",
+            p2_1: "Özellikle Coğrafi Bilgi Sistemleri (CBS) ve Gemini API gibi yapay zeka entegrasyonları üzerine yoğunlaşarak ",
+            p2_2: "veriyi anlamlı içgörülere",
+            p2_3: " dönüştürürken; ileri seviye İngilizcem, gelişmekte olan İspanyolcam ve hobilerimden gelen kişisel disiplinimle teknik ekipler ile yönetim arasında ",
+            p2_4: "güçlü bir iletişim köprüsü",
+            p2_5: " kurmayı hedefliyorum."
+        },
+        en: {
+            title: "About Me",
+            p1_1: "As a 3rd-year Management Information Systems student at Dokuz Eylül University, I adopt a ",
+            p1_2: "multidisciplinary approach",
+            p1_3: " blending technology with business strategies. By integrating Node.js, JavaScript, and MySQL backend architectures with academic disciplines like Operations Research, Decision Support Systems, and IT Law, I don't just write code—I design ",
+            p1_4: "cost-effective",
+            p1_5: " and ",
+            p1_6: "legally compliant",
+            p1_7: " ",
+            p1_8: "strategic business solutions.",
+            p1_9: "",
+            p2_1: "By focusing particularly on Geographic Information Systems (GIS) and AI integrations like the Gemini API, I transform ",
+            p2_2: "data into meaningful insights",
+            p2_3: ". Supported by my advanced English, developing Spanish, and the personal discipline gained from my hobbies, I aim to build a ",
+            p2_4: "strong communication bridge",
+            p2_5: " between technical teams and management."
+        }
+    }[language];
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -397,33 +462,35 @@ function BridgePersona() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mt-16 relative"
         >
-            <div className="bg-primary rounded-3xl p-8 md:p-10 overflow-hidden relative">
-                {/* Decorative glow */}
-                <div className="absolute top-0 right-0 w-72 h-72 bg-primary/20 rounded-full blur-[80px] pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-[60px] pointer-events-none" />
+            <div className="rounded-3xl p-8 md:p-10 overflow-hidden relative"
+                style={{ background: 'linear-gradient(135deg, #1e3f22 0%, #2d6a4f 100%)' }}
+            >
+                {/* Decorative glows */}
+                <div className="absolute top-0 right-0 w-72 h-72 rounded-full blur-[80px] pointer-events-none"
+                    style={{ background: 'radial-gradient(circle, #52b788 0%, transparent 70%)' }} />
+                <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-[60px] pointer-events-none"
+                    style={{ background: 'radial-gradient(circle, #40916c 0%, transparent 70%)' }} />
 
                 <div className="relative z-10">
-                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-4">Neden Farklıyım?</p>
-                    <blockquote className="text-white/90 text-lg md:text-xl leading-relaxed font-light mb-6 max-w-3xl">
-                        "Teknolojiyi sadece bir araç değil, işletme hedeflerine ulaşmak için{" "}
-                        <span className="text-primary font-semibold">stratejik bir kaldıraç</span> olarak görüyorum.
-                        DEU YBS disipliniyle aldığım Sistem Analizi, Bilişim Hukuku ve Finansal Muhasebe eğitimlerimi;
-                        Node.js, MySQL ve Yapay Zeka entegrasyonu konusundaki teknik tutkumla harmanlıyorum."
-                    </blockquote>
-                    <p className="text-white/60 text-base leading-relaxed max-w-3xl">
-                        Benim için bir yazılım projesi; sadece çalışan bir kod yığını değil —{" "}
-                        <span className="text-green-700 font-medium">yasalara (KVKK) uygun</span>,{" "}
-                        <span className="text-blue-400 font-medium">maliyet etkinliği (Muhasebe/Finans) hesaplanmış</span> ve{" "}
-                        <span className="text-purple-400 font-medium">kullanıcı ihtiyaçlarına (Sistem Analizi) tam yanıt veren</span>{" "}
-                        bir iş çözümüdür.
+                    <p className="text-xs font-bold uppercase tracking-[0.3em] mb-4" style={{ color: '#95d5b2' }}>{text.title}</p>
+                    <p className="text-white/90 text-lg md:text-xl leading-relaxed font-light mb-6 max-w-4xl">
+                        {text.p1_1}
+                        <span className="font-bold" style={{ color: '#95d5b2' }}>{text.p1_2}</span>{text.p1_3}
+                        <span className="font-medium" style={{ color: '#74c69d' }}>{text.p1_4}</span>{text.p1_5}<span className="font-medium" style={{ color: '#52b788' }}>{text.p1_6}</span>{text.p1_7}
+                        <span className="font-bold" style={{ color: '#95d5b2' }}>{text.p1_8}</span>{text.p1_9}
                     </p>
-                    <div className="mt-6 pt-6 border-t border-white/10 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <p className="text-white/70 text-base md:text-lg leading-relaxed max-w-4xl font-light">
+                        {text.p2_1}
+                        <span className="text-white/90 font-medium">{text.p2_2}</span>{text.p2_3}
+                        <span className="font-bold" style={{ color: '#95d5b2' }}>{text.p2_4}</span>{text.p2_5}
+                    </p>
+                    <div className="mt-6 pt-6 flex items-center gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: '#2d6a4f' }}>
                             <span className="text-white text-xs font-bold">MZ</span>
                         </div>
                         <div>
                             <p className="text-white text-sm font-semibold">Mehmet Zeycan Şener</p>
-                            <p className="text-white/40 text-xs">Business Technology Architect · DEÜ YBS</p>
+                            <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>Business Technology Architect · DEÜ YBS</p>
                         </div>
                     </div>
                 </div>
@@ -451,6 +518,7 @@ const detailVariants = {
 
 export function AboutSkills() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
+    const { language } = useLanguage();
 
     const leftCards = cards.slice(0, 4);
     const rightCards = cards.slice(4, 8);
@@ -458,6 +526,21 @@ export function AboutSkills() {
     const hoveredCard = cards.find((c) => c.id === hoveredId) ?? null;
     const isLeftHovered = hoveredCard ? leftCards.some((c) => c.id === hoveredId) : false;
     const isRightHovered = hoveredCard ? rightCards.some((c) => c.id === hoveredId) : false;
+
+    const t = {
+        tr: {
+            profile: "Profil",
+            whoami: "Ben kimim?",
+            detailed: "Detaylı görünümdesiniz.",
+            explore: "Bir karta tıklayarak daha fazlasını keşfedin."
+        },
+        en: {
+            profile: "Profile",
+            whoami: "Who am I?",
+            detailed: "Detailed view active.",
+            explore: "Click a card to discover more."
+        }
+    }[language];
 
     return (
         <section id="about" className="py-24 relative bg-background overflow-hidden">
@@ -478,14 +561,14 @@ export function AboutSkills() {
                     viewport={{ once: true }}
                     className="mb-14"
                 >
-                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">Profil</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">{t.profile}</p>
                     <h2 className="text-4xl md:text-5xl font-black tracking-tight text-foreground leading-tight">
-                        Ben kimim?
+                        {t.whoami}
                     </h2>
                     <p className="text-muted-foreground mt-3 text-base max-w-xl">
                         {hoveredId
-                            ? "Detaylı görünümdesiniz."
-                            : "Bir karta tıklayarak daha fazlasını keşfedin."}
+                            ? t.detailed
+                            : t.explore}
                     </p>
                 </motion.div>
 

@@ -40,17 +40,30 @@
   --font-sans: var(--font-inter), sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   /* Subtle ambient gradient blending beige and light green */
   background-image:
     radial-gradient(at 0% 0%,    hsla(113, 15%, 85%, 0.6)   0px, transparent 55%),
     radial-gradient(at 100% 0%,  hsla(42, 33%, 89%, 0.5)    0px, transparent 55%),
     radial-gradient(at 50% 100%, hsla(113, 20%, 90%, 0.4)   0px, transparent 55%);
   background-attachment: fixed;
+}
+
+/* Text selection color */
+::selection {
+  background-color: rgba(30, 63, 34, 0.15);
+  color: var(--foreground);
 }
 
 /* Glassmorphism Utilities */
@@ -68,3 +81,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.80);
   box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.07);
 }
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

@@ -211,8 +211,8 @@ function TiltCard({
                         style={{ backgroundImage: `url(${item.image})` }}
                     />
                     {/* Gradient overlay always present, deepens on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/50 to-white/30 group-hover:opacity-0 transition-opacity duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/50 to-white/10 group-hover:opacity-10 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/20 to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
                 </div>
 
                 {/* Shimmer sweep on hover */}

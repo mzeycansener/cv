@@ -13,6 +13,7 @@ interface MenuItemProps {
     marqueeBgColor?: string;
     marqueeTextColor?: string;
     borderColor?: string;
+    onClick?: () => void;
 }
 
 interface FlowingMenuProps {
@@ -23,6 +24,7 @@ interface FlowingMenuProps {
     marqueeBgColor?: string;
     marqueeTextColor?: string;
     borderColor?: string;
+    onItemClick?: (index: number) => void;
 }
 
 export function FlowingMenu({
@@ -32,7 +34,8 @@ export function FlowingMenu({
     bgColor = '#060010',
     marqueeBgColor = '#fff',
     marqueeTextColor = '#060010',
-    borderColor = '#fff'
+    borderColor = '#fff',
+    onItemClick
 }: FlowingMenuProps) {
     return (
         <div className="menu-wrap" style={{ backgroundColor: bgColor }}>
@@ -46,6 +49,7 @@ export function FlowingMenu({
                         marqueeBgColor={marqueeBgColor}
                         marqueeTextColor={marqueeTextColor}
                         borderColor={borderColor}
+                        onClick={() => onItemClick?.(idx)}
                     />
                 ))}
             </nav>
@@ -53,7 +57,7 @@ export function FlowingMenu({
     );
 }
 
-function MenuItem({ link, text, image, speed = 15, textColor, marqueeBgColor, marqueeTextColor, borderColor }: MenuItemProps) {
+function MenuItem({ link, text, image, speed = 15, textColor, marqueeBgColor, marqueeTextColor, borderColor, onClick }: MenuItemProps) {
     const itemRef = useRef<HTMLDivElement>(null);
     const marqueeRef = useRef<HTMLDivElement>(null);
     const marqueeInnerRef = useRef<HTMLDivElement>(null);
@@ -159,6 +163,10 @@ function MenuItem({ link, text, image, speed = 15, textColor, marqueeBgColor, ma
                 href={link}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onClick={(e) => {
+                    e.preventDefault();
+                    onClick?.();
+                }}
                 style={{ color: textColor }}
             >
                 {text}
